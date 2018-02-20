@@ -2,29 +2,29 @@ foundations and techniques for evaluating an SQL query (Chapters 12 and 14)
 ---------------------------------------------------------------------------
 
 System catalog:
-the descriptive data, or metadata, stored in special tables.
+the descriptive data, or metadata, stored in the database.
 -> used to find the best way to evaluate a query.
 
   - For each table:
      · its table name
      · the attribute name and type of its attributes
      · the index name of each index on the table
-     · the integrity <???> (primary key, foreign key contraints)
+     · the integrity constraints (primary key, foreign key contraints)
 
   - For each index:
      · the index name and the structure (e.g., B+ tree) of the index
      · the search key attributes
 
   - For each view:
-     · its view name and defination.
+     · its view name and definition.
 
  In addition statitics about tables and indexes are stored in the catalog like:
   - cardinality (number of tubles)
   - size (number of pages)
   - index cardinality (number of distinct key values)
   - index size (number of pages)
-  - index height
-  - index range
+  - index height (number of non-leaf levels)
+  - index range (min. and max. key)
 
 ---------------------------------------------------------------------------
 
@@ -40,13 +40,24 @@ Sailors(sid: integer, .mame: string, rating: integer, age: real)
 Reserves(sid: integer, bid: integer, day: dates, marne: string)
 
 ---------------------------------------------------------------------------
+Operators:
+  - Selection (σ) Select a subset of rows.
+  - Projection (π) Remove unwanted columns.
+  - Join (⋈) Combine two relations.
+  - Set-difference (−) Tuples in reln. 1, but not in reln. 2.
+  - Intersection (∩) Tuples in both reln. 1 and reln. 2.
+  - Union (∪) Tuples in rel 1 and/or in reln 2.
+---------------------------------------------------------------------------
 
 Techniques for developing evaluation algorithms:
   - Indexing
      · if a selection or join condition is specified, use an index to
        examine just the tubles that satisfy the condition.
+       (if we know we are only are gonna find one element, indexing is good)
   - Iteration
      · examine all tubles in an input table. One after another.
+        (if we suspect more than one element to find, iteration is better than
+        indexing)
   - Partitioning
      · by partitioning tubles on a sort key, we can often decompose
        an operation into a less expensive collection of operations on
@@ -58,9 +69,11 @@ or (2) an index plus a matching selection condition.
 
 Algorithms for relational operators:
   - Selection
-     ·
+     · Best performance depends on: (1) what indexes available (2) expected size
+       of result.
   - Projection
-     ·
+     · drop certain fields of the input (if DISTINCT is not in the SELECT-
+       clause of the SQL)
   - Join
      ·
   - Other
