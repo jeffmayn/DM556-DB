@@ -1,0 +1,101 @@
+foundations and techniques for evaluating an SQL query (Chapters 12 and 14)
+---------------------------------------------------------------------------
+
+System catalog:
+the descriptive data, or metadata, stored in special tables.
+-> used to find the best way to evaluate a query.
+
+  - For each table:
+     · its table name
+     · the attribute name and type of its attributes
+     · the index name of each index on the table
+     · the integrity <???> (primary key, foreign key contraints)
+
+  - For each index:
+     · the index name and the structure (e.g., B+ tree) of the index
+     · the search key attributes
+
+  - For each view:
+     · its view name and defination.
+
+ In addition statitics about tables and indexes are stored in the catalog like:
+  - cardinality (number of tubles)
+  - size (number of pages)
+  - index cardinality (number of distinct key values)
+  - index size (number of pages)
+  - index height
+  - index range
+
+---------------------------------------------------------------------------
+
+SQL:
+queries are translated into an extended form of relational algebra,
+and query evaluation plans are represented as trees of relational operators.
+
+Query optimization:
+The process of finding a good evaluation plan.
+
+Query examples:
+Sailors(sid: integer, .mame: string, rating: integer, age: real)
+Reserves(sid: integer, bid: integer, day: dates, marne: string)
+
+---------------------------------------------------------------------------
+
+Techniques for developing evaluation algorithms:
+  - Indexing
+     · if a selection or join condition is specified, use an index to
+       examine just the tubles that satisfy the condition.
+  - Iteration
+     · examine all tubles in an input table. One after another.
+  - Partitioning
+     · by partitioning tubles on a sort key, we can often decompose
+       an operation into a less expensive collection of operations on
+       partitions. -> use sorting and hashing techniques.
+
+Access paths:
+a way of retrieving tubles from a table and consists of either (1) a file scan
+or (2) an index plus a matching selection condition.
+
+Algorithms for relational operators:
+  - Selection
+     ·
+  - Projection
+     ·
+  - Join
+     ·
+  - Other
+     ·
+
+-------------------------------------------------------------------------------
+1. Describe three techniques commonly used when developing algorithms for relational op-
+erators. Explain how these techniques can be used to design algorithms for the selection,
+projection, and join operators.
+
+2. What is an access path? When does an index match an access path? What is a primar1J
+conj1Lnct, and why is it important?
+
+3. What information is stored in the system catalogs?
+
+
+4. What are the benefits of making the system catalogs be relations?
+
+
+5. What is the goal of query optimization? Why is optimization important?
+
+
+6. Describe pipelining and its advantages.
+
+
+7. Give an example query and plan in which pipelining cannot be used.
+
+
+8. Describe the itemto1' interface and explain its advantages.
+
+
+9. What role do statistics gathered from the database play in query optimization?
+
+
+10. What were the important design decisions made in the System R optimizer?
+
+
+11. Why do query optimizers consider only left-deep join trees? Give an ex
