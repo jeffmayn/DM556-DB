@@ -1,0 +1,63 @@
+TA web: imada.sdu.dk/~trfri14
+
+9.7: Explain what the buffer manager must do to process a read request for
+a page. What happens if the requested page is in the pool but not pinned?
+--------------------------------------------------------------------------
+When a page is requested the buffer manager does the following:
+1.
+The buffer pool is checked to see if it contains the requested page. If the page is in
+the pool, skip to step 2. If the page is not in the pool, it is brought in as follows:
+(a) A frame is chosen for replacement, using the replacement policy.
+(b) If the frame chosen for replacement is dirty, it is flushed (the page it contains
+is written out to disk).
+(c) The requested page is read into the frame chosen for replacement.
+2.
+The requested page is pinned (the pin count of the chosen frame is incremented)
+and its address is returned to the requester.
+
+
+9.8: When does a buffer manager write a page to disk?
+--------------------------------------------------------------------------
+n/a
+
+9.9: What does it mean to say that a page is pinned in the buffer pool? Who
+is responsible for pinning pages? Who is responsible for unpinning pages?
+--------------------------------------------------------------------------
+1.
+Pinning a page means the pin count of its frame is incremented.
+Pinning a page guarantees higher-level DBMS software that the page will not be
+removed from the buffer pool by the buffer manager. That is, another file page
+will not be read into the frame containing this page until it is unpinned by this requestor.
+2.
+It is the buffer manager’s responsibility to pin a page.
+3.
+It is the responsibility of the requestor of that page to tell the buffer manager to unpin a page.
+
+9.10: When a page in the buffer pool is modified, how does the DBMS ensure
+that this change is propagated to the disk? (Explain the role of the buffer manager as
+well as the modifier of the page.)
+--------------------------------------------------------------------------
+n/a
+
+9.11: What happens if a page is requested when all pages in the buffer pool
+are dirty?
+--------------------------------------------------------------------------
+If there are some unpinned pages, the buffer manager chooses one by
+using a replacement policy, flushes this page, and then replaces it with the requested
+page
+
+9.22:
+--------------------------------------------------------------------------
+n/a
+
+
+10 keywords:
+-----------------------
+Storage and Indexing:
+  - Hashmaps and B+ tress
+  - Clustered vs unclustered
+  - File structure
+  - Index structure (e.g with keys)
+  - Magnetic disk
+  - Disk, tapes, ssd, records (data on external storage, physical charistica on disks)
+  - RAID levels

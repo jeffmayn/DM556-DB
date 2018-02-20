@@ -1,0 +1,41 @@
+Takehome-exam:
+
+6)
+    1: From root -> left (68-90) -> right (insert after 53)
+    2: From root -> left  (112-138)-> left (115-121) no room -> split
+        split is done by:
+    3: From root -> right (68-90) -> remove 72
+
+7)
+
+    the 3 global bit desides that we look at the 3 LSB:
+    the 3, 2, 3, 2, 3, 3 local bits desides ...
+    -------------------------------------------------------
+    1: h(108) -> 100     (3) [ 44 ][ 108 ][   ][    ]
+
+    2: h(57)  -> 001     (2) [ 85 ][ 89 ][ 41 ][ 61 ]
+        local depth < global depth ->  increase local depth to 3
+              -> 001     (3) [ 89 ][ 41 ][ 57 ][   ]
+              -> 101     (3) [ 85 ][ 61 ][    ][   ]
+
+    3: h(46)  -> 1000
+        global depth < local depth -> increase global depth to 4
+
+        0000
+        0001
+        0010
+        0011
+        0100
+        0101   ->
+        0110   -> (4)
+        0111
+        1000   ->
+        1001   ->
+        1010
+        1011
+        1100
+        1101   ->
+        1110   -> (4)
+        1111
+
+8)
