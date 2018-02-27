@@ -18,7 +18,7 @@ the descriptive data, or metadata, stored in the database.
   - For each view:
      · its view name and definition.
 
- In addition statitics about tables and indexes are stored in the catalog like:
+ In addition statistics about tables and indexes are stored in the catalog like:
   - cardinality (number of tubles)
   - size (number of pages)
   - index cardinality (number of distinct key values)

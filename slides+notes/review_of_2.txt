@@ -1,0 +1,5 @@
+run = break up file into smaller files that fit into
+      memory, sort each of the files using in memory
+      sort algorithm
+
+pass = merge step

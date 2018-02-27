@@ -1,0 +1,52 @@
+IO costs vægter tungt til eksamner.
+
+Exercise 12.4 Consider the following schema with the Sailors relation:
+
+  - Sailors(sid: integer, sname: string, rating: integer, age: real)
+
+For each of the following indexes, list whether the index matches the given selection conditions.
+If there is a match, list the primary conjuncts.
+
+
+1. A B+-tree index on the search key ( Sailors.sid ).
+  (a) σSailors.sid < 50.000 (Sailors)                                 // yes: primary: σSailors.sid
+  (b) σSailor.sid = 50.000 (Sailors)                                  // yes: primary: σSailors.sid
+
+2. A hash index on the search key ( Sailors.sid ).
+  (a) σSailors.sid < 50.000 (Sailors)                                 // no:
+  (b) σSailors.sid = 50.000 (Sailors)                                 // yes: primary: σSailors.sid
+
+3. A B+-tree index on the search key ( Sailors.sid, Sailors.age ).
+  (a) σSailors.sid < 50.000 ∧ Sailors.age = 21 (Sailors)              // yes: primary: σSailors.sid, Sailors.age
+  (b) σSailors.sid = 50.000 ∧ Sailors.age > 21 (Sailors)              // yes: primary: σSailors.sid, Sailors.age
+  (c) σSailors.sid = 50.000(Sailors)                                  // yes
+  (d) σSailors.age = 21(Sailors)                                      // no (age is not a prefix)
+
+4. A hash-tree index on the search key ( Sailors.sid, Sailors. age ).
+  (a) σSailors.sid = 50.000 ∧ Sailors.age = 21 (Sailors)              // yes:
+  (b) σSailors.sid = 50.000 > Sailors.age = 21 (Sailors)              // yes:
+  (c) σSailors.sid = 50.000(Sailors)                                  // yes
+  (d) σSailors.age = 21 (Sailors)                                     // no: (not prefix)
+
+Exercise 14.2 Consider a relation R( a, b, c, d, e) containing 5,000,000 records, where each data
+page of the relation holds 10 records. R is organized as a sorted file with secondary indexes.
+Assume that R.a is a candidate key for R, with values lying in the range 0 to 4,999,999, and
+that R is stored in R.a order. For each of the following relational algebra queries, state which
+of the following approaches (or combination thereof) is most likely to be the cheapest:
+
+  • Access the sorted file for R directly.
+
+Evaluating Relational Operators
+
+  • Use a clustered B+ tree index on attribute R.a.
+  • Use a linear hashed index on attribute R.a.
+  • Use a clustered B+ tree index on attributes (R.a, R.b).
+  • Use a linear hashed index on attributes (R.a, R.b).
+  • Use an unclustered B+ tree index on attribute R.b.
+
+    1. σa < 50.000 & b < 50.000(R)                                   // clustered b+ tree on R.a
+    2. σa = 50.000 & b < 50.000(R)                                   // linear hashed index on R.a
+    3. σa > 50.000 & b = 50.000(R)                                   // clustered b+ tree on R.b
+    4. σa = 50.000 & b = 50.000(R)                                   // linear hashed index on R.a
+    5. σa != 50.000 b = 50.000(R)                                    // clustered b+ tree on R.b then scan the rest
+    6. σa < 50.000 v b = 50.000(R)                                   // scan the entire database

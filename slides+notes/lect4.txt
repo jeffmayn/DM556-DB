@@ -1,0 +1,9 @@
+Query optimization
+----------------------------------
+
+Roadmap:
+translation to relational alg. -> query plan cost est. -> query plan enum.
+
+SQL provides an extension to relational algebra: for instance 'group by' and 'having'
+
+Goal of optimization:: To find more efficient plans that compute the same answer
