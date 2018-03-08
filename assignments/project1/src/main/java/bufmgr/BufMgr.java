@@ -37,6 +37,11 @@ public class BufMgr implements GlobalConst {
 	 * @param numbufs: number of pages in the buffer pool
 	 */
 
+	 /*
+	 *	Here we initialize our buffermanager with the variable numbufs which determines
+	 * 	the size of the pool, and initialize the frame table in the arrays.
+	 *	We initialize our HashMap for efficient lookup and our replace policy as the clock policy.
+	 */
 	public BufMgr(int numbufs) {
 	    // initialize the buffer pool and frame table
 	    bufpool = new Page[numbufs];
@@ -65,6 +70,15 @@ public class BufMgr implements GlobalConst {
 	 * @throws IllegalStateException
 	 *             if all pages are pinned (i.e. pool exceeded)
 	 */
+
+	 /*
+	 *	('Minibase.DiskManager.deallocate_page(firstid,run_size)': is only code we wrote)
+	 *	Removed the for-loop because it was made redundant by the deallocate_page-function.
+	 *	If we somehow cant pin the page, we just call the function deallocate_page which points to our
+	 *	newly allocaled memory (first page) and then deallocate it based on the number of elements (run_size)
+	 *
+	 *	If we succeed in pinning the page(s) we tell the replacer that it has got a new page.
+	 */
 	public PageId newPage(Page firstpg, int run_size) {
 		// allocate the run
 		PageId firstid = Minibase.DiskManager.allocate_page(run_size);
@@ -89,6 +103,15 @@ public class BufMgr implements GlobalConst {
 	 *            identifies the page to remove
 	 * @throws IllegalArgumentException
 	 *             if the page is pinnedreplacer
+	 */
+
+	 /*
+	 *	We want to free a page whenever it has no reference because it is no longer
+	 *	in use and a waste of space.
+	 *
+	 *	If a page has references we cant remove it and throw an exception.
+	 *	Else we remove it and set the page to INVALID, and tell it to the replacer.
+	 *	Lastly we deallocate the page.
 	 */
 	public void freePage(PageId pageno) throws IllegalArgumentException {
 		final FrameDesc fd = pagemap.get(pageno.pid);
@@ -165,6 +188,12 @@ public class BufMgr implements GlobalConst {
 	 * @throws IllegalArgumentException
 	 *             if the page is not present or not pinned
 	 */
+
+	 /*
+	 *	We want to remove a reference from a page, by decrementing the pin count
+	 *	and if the page has been altered we set its status to dirty.
+	 *	Lastly we tell it to the replacer.
+	 */
 	public void unpinPage(PageId pageno, boolean dirty) throws IllegalArgumentException {
 		final FrameDesc fd = pagemap.get(pageno.pid);
 
@@ -179,13 +208,20 @@ public class BufMgr implements GlobalConst {
 	/**
 	 * Immediately writes a page in the buffer pool to disk, if dirty.
 	 */
+
 	public void flushPage(PageId pageno) {
+		if (pagemap.get(pageno.pid).dirty)
 		Minibase.DiskManager.write_page(pageno, bufpool[pagemap.get(pageno.pid).index]);
 	}
 
 	/**
 	 * Immediately writes all dirty pages in the buffer pool to disk.
 	 */
+
+	/*
+	*	With a simple lambda we check each keys if their values are dirty, if so,
+	* we flush them.
+	*/
 	public void flushAllPages() {
 		pagemap.forEach( (k,v) -> flushPage(v.pageno));
 	}
@@ -200,6 +236,11 @@ public class BufMgr implements GlobalConst {
 	/**
 	 * Gets the total number of unpinned buffer frames.
 	 */
+
+	/*
+	*	We convert the frame table array to a stream, then we filter all pages
+	* which has a reference (!= zero) and counts them.
+	*/
 	public int getNumUnpinned() {
 		return (int)Arrays.stream(frametab).filter(i-> 0 == i.pincnt).count();
 	}
