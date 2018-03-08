@@ -150,33 +150,48 @@ public class BufMgr implements GlobalConst {
 	 *             if all pages are pinned (i.e. pool exceeded)
 	 */
 
-	 // TODO: OMSKRIV!!!!
-	public void pinPage(PageId pageno, Page page, boolean skipRead) {
-		final FrameDesc fd = pagemap.get(pageno.pid);
+	 /*
+	 *The pinpage function pins a page, given as argument a page and an id, it furthermore requires an enum(skipread)
+	 * to dictate whether or not it should pin the id or create a new page.
+	 */
+	 public void pinPage(PageId pageno, Page page, boolean skipRead) {
+		 if( pagemap.containsKey(pageno.pid) ){
+			 if(skipRead) throw new IllegalArgumentException( "Page(" + pageno.pid + ") PIN_MEMCPY and the page is pinned" );
 
-		if(null != fd){
-			if(skipRead) throw new IllegalArgumentException("Page(" + pageno.pid + ") PIN_MEMCPY and the page is pinned");
-			fd.pincnt++;
-			page.setPage(bufpool[fd.index]);
-			replacer.pinPage(fd);
-		} else {
-			final int index = replacer.pickVictim();
-			if(EMPTY_SLOT == index) throw new IllegalStateException("all pages are pinned");
-			final FrameDesc victimfd = frametab[index];
-			if(EMPTY_SLOT != victimfd.pageno.pid){
-				pagemap.remove(victimfd.pageno.pid);
-				if(victimfd.dirty) Minibase.DiskManager.write_page(victimfd.pageno, bufpool[index]);
-			}
-			if(skipRead) bufpool[index].copyPage(page);
-			else Minibase.DiskManager.read_page(pageno, bufpool[index]);
+			 final FrameDesc fd = pagemap.get( pageno.pid );
 
-			victimfd.pincnt = 1;
-			page.setPage(bufpool[index]);
-			pagemap.put(pageno.pid, victimfd);
-			victimfd.pageno.pid = pageno.pid;
-			replacer.pinPage(victimfd);
-		}
-	}
+			 page.setPage(bufpool[fd.index]);
+			 increment(fd);
+		 } else {
+			 final int index = replacer.pickVictim();
+
+			 if( EMPTY_SLOT == index ) throw new IllegalStateException("All pages are pinned");
+
+			 final FrameDesc fd = frametab[ index ];
+
+			 if( INVALID_PAGEID != fd.pageno.pid ){
+				 pagemap.remove( fd.pageno.pid );
+				 if( fd.dirty ) Minibase.DiskManager.write_page( fd.pageno, bufpool[ index ]);
+			 }
+			 if( skipRead ) bufpool[ index ].copyPage( page );
+			 else Minibase.DiskManager.read_page( pageno, bufpool[ index ]);
+
+			 page.setPage( bufpool[ index ]);
+			 new_page( fd, pageno );
+		 }
+	 }
+
+	  	private void increment (final FrameDesc fd){
+	  		fd.pincnt++;
+	  		replacer.pinPage(fd);
+	  	}
+
+	  	private void new_page(final FrameDesc fd, final PageId pageno){
+	  		fd.pincnt = 1;
+	  		pagemap.put( pageno.pid, fd );
+	  		fd.pageno.pid = pageno.pid;
+	  		replacer.pinPage( fd );
+	  	}
 
 	/**
 	 * Unpins a disk page from the buffer pool, decreasing its pin count.
