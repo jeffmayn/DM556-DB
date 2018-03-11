@@ -155,24 +155,32 @@ public class BufMgr implements GlobalConst {
 	 * to dictate whether or not it should pin the id or create a new page.
 	 */
 	 public void pinPage(PageId pageno, Page page, boolean skipRead) {
+		 // Check if page is in main memory.
 		 if( pagemap.containsKey(pageno.pid) ){
+			 // If the page is already allocated, then allocating it again is redundant, thus skipread throws an argument.
 			 if(skipRead) throw new IllegalArgumentException( "Page(" + pageno.pid + ") PIN_MEMCPY and the page is pinned" );
-
+			
+			 // Copy frame to out-pgae and increment frame pincount.
 			 final FrameDesc fd = pagemap.get( pageno.pid );
 
 			 page.setPage(bufpool[fd.index]);
 			 increment(fd);
+		 // If the page is not in main memory, room has to be made for the new page.
 		 } else {
+			 // Search for a victim, aka an invalid page.
 			 final int index = replacer.pickVictim();
 
+			 // If the replacer found no victims, there is no room for another page.
 			 if( EMPTY_SLOT == index ) throw new IllegalStateException("All pages are pinned");
 
 			 final FrameDesc fd = frametab[ index ];
-
-			 if( INVALID_PAGEID != fd.pageno.pid ){
+			 
+			 // If the selected page is valid, it must be removed from main memory and if nessecery(dirty) written to disk.
+			 if( INVALID_PAGEID != fd.pageno.pid ){ 
 				 pagemap.remove( fd.pageno.pid );
 				 if( fd.dirty ) Minibase.DiskManager.write_page( fd.pageno, bufpool[ index ]);
 			 }
+			 // If PIN_MEMCPY, copy from the page to the buffer. Else the the page form the disk into the buffer.
 			 if( skipRead ) bufpool[ index ].copyPage( page );
 			 else Minibase.DiskManager.read_page( pageno, bufpool[ index ]);
 
