@@ -1,0 +1,11 @@
+## Keywords - Concurrency control with locking
+
+Short introduction
+- Goal of database tuning
+
+Index selection
+- Go through guidelines
+
+Query Tuning
+- The idea
+- How to speed up important queries

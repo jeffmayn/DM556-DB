@@ -1,0 +1,31 @@
+# DM556 Keywords Week 19 #
+
+
+## A few introductory points for both  ##
+
+* Homogeneous / Hetrogeneous D DBMS
+
+* Partitioning / Fragmenting of data and how it affects the topic.
+
+* Catalog management (Naming etc.)
+
+## Distributed Query Processing ##
+
+* Joins (Be quick with the first two, choose one of the others to go in depth)
+   * Fetch as needed
+   * Ship to one site
+   * Semi-join
+   * Bloom-join
+
+
+
+
+## Distributed Transactions ##
+
+* Distributed deadlock
+
+* What is 2PC (2 phase commit)
+
+* Why 2PC?
+
+* Why is 2PC blocking and how does 3PC solve the problem?

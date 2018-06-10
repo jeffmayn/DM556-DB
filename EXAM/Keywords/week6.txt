@@ -1,0 +1,18 @@
+## Keywords - Concurrency control without locking
+
+Short introduction
+- Why concurrency control?
+- Advantages of a lock-free scheme
+- (Optimistic CC)
+
+Object based TimeStamp CC
+- Thomas Write Rule
+- Recoverability (?)
+
+Multiversion TimeStamp CC
+- Read _old_ versions
+- Write _new_ copy
+
+Kung-Robinson
+- 3 phases: READ; VALIDATE; WRITE
+- Validation 3 tests & serial validation

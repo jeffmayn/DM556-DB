@@ -1,0 +1,29 @@
+Læseplan:
+------------------------------------------------------
+09.06:	Læs om Storage and Indexing + lav PP
+	Læs om External Sorting + lav PP
+	Mind Map
+
+10.06: 	Læs om Relational operator evaluation + PP
+	Læs om Query Optimization + PP
+	Mind Map
+
+11.06:	Læs om Concurrency control with locking + PP
+	Læs om Concurrency control without locking + PP
+	Mind Map
+
+12.06:	Læs om Crash Recovery + PP
+	Læs om Database Tuning + PP
+	Mind Map
+
+13.06:	Læs om Distributed Query Processing + PP
+	Læs om Distributed Transactions + PP
+	Mind Map
+
+14.06: Øv fremlæggelse
+15.06: Øv fremlæggelse
+16.06: Øv fremlæggelse
+17.06: Øv fremlæggelse
+
+18.06: Øv fremlæggelse eller Exam
+19.06: Exam

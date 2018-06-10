@@ -1,0 +1,8 @@
+## Exam Keywords - External Sorting
+
+1. Two-way merge sort
+2. External merge sort
+3. Optimization of general external merge sort
+4. B+ Tree
+5. Clustered index
+6. Unclustered index
