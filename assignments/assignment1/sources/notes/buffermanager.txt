@@ -1,0 +1,62 @@
+Buffer manager:
+-------------------------------
+BM => software layer responsible for bringing pages from disk to main
+memory as needed
+
+problem:
+------
+DB contains 1 million pages.
+Main memory has only 1000 pages available for holding data.
+
+If we query a scan for the entire file > the file cant be
+read into memory as one file.
+
+solution:
+---------
+DBMS brings in page to memory as they are needed, and the process
+decides which existing page in main mem. to replace in order to make
+space for new page. -> this is called replacement policy.
+
+buffer pool:
+------------------------------------
+BM partitions the main memory into collection of pages.
+The main memory pages in the buffer pool is called
+frames (think of them as slots that can hold a page).
+
+BM maintains some bookkeeping information and two variables for
+each frame in the pool:
+
+    - pincount (the number of times that the page currently in a
+      given frame has been requested but not released)
+
+    - dirty (indicates whether the page has been modified since it
+      was brought into the buffer pool from disk)
+
+
+Initial setup:
+
+  - pinCount is set to zero for every frame
+  - dirty bits are turned off.
+
+when a page is requested the buffer manager does the following:
+
+  - Check buffer pool to see if some frame contains the requested page,
+    and, if so, incremenent the pinCount of that frame.
+    If page is not in the pool, the buffer manager do this:
+
+      - chooses a frame for replacement, using the replacement policy,
+        and increment its pinCount
+
+      - if the dirty bit for the replacement frame is on, writes the page
+        it contains to disk.
+
+      - Reads the requested page into the replacement frame.
+
+  - Returns the (main memory) address of the frame containing the requested
+    page to the requestor.
+
+--------------------------------------------------
+
+incrementing pinCount is often called pinning the requested page in its frame.
+decrementing pinCount is unpinning.
+

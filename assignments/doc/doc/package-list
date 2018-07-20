@@ -1,9 +1,0 @@
-bufmgr
-diskmgr
-global
-heap
-index
-parser
-query
-relop
-tests

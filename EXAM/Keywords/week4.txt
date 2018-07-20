@@ -1,7 +1,0 @@
-## Exam keywords - Query Optimization
-
-1. What is query optimization and why?
-2. Relational Algebra Equivalences.
-3. Query optimization techniques.
-	* Two main query optimization techniques (1. Heuristic reordering of the relational algebra operations. 2. Systematic estimating the cost of the different execution plans, and choosing one with the lowest cost.) 
-4. Nested Loop Join, Sort-Merge Join, Hash Join
